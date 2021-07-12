@@ -1,0 +1,35 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  Build and Test:
+
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+    
+    - name: Build the Solution
+      run: msbuild HelloWorld.sln -t:restore,build -p:RestorePackagesConfig=true
+      
+    - name: Setup VSTest and add to PATH
+      uses: darenm/Setup-VSTest@v1
+      
+    - name: Run VSTest
+      id: run_vstest
+      run: vstest.console.exe .\HelloWorld\obj\Debug\HelloWorld.dll /Platform:x64
