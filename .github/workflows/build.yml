@@ -1,7 +1,7 @@
 name: .NET
 
 env:
-  VERSION: 3.x
+  VERSION: '5.0.x'
 
 on:
   push:
